@@ -1,0 +1,140 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" style="color:white;">Café Unidac</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarColor02">
+     <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+           <a class="nav-link" id="novo" (click)="onOpenModal(null,'add')">Novo Colaborador<span class="sr-only">(current)</span></a>
+        </li>
+     </ul>
+     <form class="form-inline my-2 my-lg-0">
+        <input type="search"
+         name="key" (ngModelChange)="procurarColaboradores(key.value)" #key="ngModel" ngModel
+         id="searchName" class="form-control mr-sm-2" placeholder="Procurar..." required>
+     </form>
+  </div>
+</nav>
+
+<div class="container" id="main-container">
+<div class="row">
+  <div *ngFor="let colaborador of colaboradores" class="col-md-6 col-xl-3">
+     <div class="card m-b-30">
+        <div class="card-body row">
+           <div class="col-6 card-title align-self-center mb-0">
+              <h5>{{colaborador?.nome}}</h5>
+           </div>
+        </div>
+        <ul class="list-group list-group-flush">
+           <li class="list-group-item"><b>CPF:</b> {{colaborador?.cpf}}</li>
+           <li class="list-group-item"><b>Opção:</b> {{colaborador?.opcao}}</li>
+        </ul>
+        <div class="card-body">
+           <div class="float-right btn-group btn-group-sm">
+              <a (click)="onOpenModal(colaborador, 'edit')" class="btn btn-primary tooltips" data-placement="top" data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
+              <a (click)="onOpenModal(colaborador, 'delete')" class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></a>
+           </div>
+        </div>
+     </div>
+  </div>
+</div>
+
+<!-- Modal adicionar colaborador -->
+<div class="modal fade" id="addColabModal" tabindex="-1" role="dialog" aria-labelledby="addColabModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+       <div class="modal-header">
+          <h5 class="modal-title" id="addColabModalLabel">Adicionar Colaborador</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+          </button>
+       </div>
+       <div class="modal-body">
+          <form #addForm="ngForm" (ngSubmit)="onAddColaborador(addForm)">
+          <div class="form-group">
+             <label for="nome">Nome</label>
+             <input type="text" ngModel name="nome" class="form-control" id="nome" placeholder="Nome" required>
+          </div>
+          <div class="form-group">
+             <label for="cpf">CPF</label>
+             <input ngModel name="cpf" class="form-control" id="cpf" placeholder="CPF" required>
+          </div>
+          <div class="form-group">
+             <label for="opcao">Opção</label>
+             <input type="text" ngModel name="opcao" class="form-control" id="opcao" placeholder="Opção" required>
+          </div>
+          <div class="modal-footer">
+             <button type="button" id="add-colab-form" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+             <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary" >Salvar alterações</button>
+          </div>
+          </form>
+       </div>
+    </div>
+  </div>
+  </div>
+
+<!-- Modal editar -->
+<div class="modal fade" id="updateColabModal" tabindex="-1" role="dialog" aria-labelledby="colabEditModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="colabEditModalLabel">Editar colaborador {{editColaborador?.nome}}</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+           <form #editForm="ngForm">
+              <div>
+                 <label for="nome">Nome</label>
+                 <input type="text" ngModel="{{editColaborador?.nome}}" name="nome" class="form-control" id="nome" aria-describedby="emailHelp" placeholder="Nome">
+              </div>
+              <input type="hidden" ngModel="{{editColaborador?.id}}" name="id" class="form-control" id="id">
+              <div class="form-group">
+                 <label for="cpf">CPF</label>
+                 <input ngModel="{{editColaborador?.cpf}}" name="cpf" class="form-control" id="cpf" placeholder="CPF">
+              </div>
+              <div class="form-group">
+                 <label for="opcao">Opção</label>
+                 <input type="text" ngModel="{{editColaborador?.opcao}}" name="opcao" class="form-control" id="opcao" placeholder="Opção">
+              </div>
+              <div class="modal-footer">
+                 <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Fechar</button>
+                 <button (click)="onUpdateColaborador(editForm.value)" data-dismiss="modal" class="btn btn-primary" >Salvar alterações</button>
+              </div>
+           </form>
+        </div>
+     </div>
+  </div>
+</div>
+
+<!-- Modal deletar -->
+<div class="modal fade" id="deleteColabModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="deleteModelLabel">Deletar colaborador</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+           <p>Tem certeza que deseja deletar o colaborador {{deleteColaborador?.nome}}?</p>
+           <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+              <button (click)="onDeleteColaborador(deleteColaborador?.id)" class="btn btn-danger" data-dismiss="modal">Sim</button>
+           </div>
+        </div>
+     </div>
+  </div>
+</div>
+</div>
+
+<!-- Notificação para sem colaboradores -->
+<div *ngIf="colaboradores?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+<div class="alert alert-info" role="alert">
+  <h4 class="alert-heading">SEM COLABORADORES!</h4>
+  <p>Nenhum colaborador foi encontrado.</p>
+</div>
+</div>
