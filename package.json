@@ -4,11 +4,15 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --o",
-    "build": "ng build",
-    "deploy": "ng deploy --base-href=https://bruam.github.io/unidacCafe-front/",
+    "build": "ng build --prod",
+    "deploy": "ng deploy",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
+  },
+  "engines": {
+    "node": "16.2.0",
+    "npm": "6.14.5"
   },
   "private": true,
   "dependencies": {
