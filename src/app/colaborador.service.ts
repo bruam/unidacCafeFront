@@ -14,18 +14,18 @@ export class ColaboradorService {
   constructor(private http: HttpClient) { }
 
   public getColaboradores(): Observable<Colaborador[]> {
-    return this.http.get<Colaborador[]>(`${this.apiServerUrl}cafe/colab/`);
+    return this.http.get<Colaborador[]>(`${this.apiServerUrl}`);
   }
 
   public addColaborador(colab: Colaborador): Observable<Colaborador> {
-    return this.http.post<Colaborador>(`${this.apiServerUrl}cafe/colab/`, colab);
+    return this.http.post<Colaborador>(`${this.apiServerUrl}`, colab);
   }
 
   public updateColaborador(colab: Colaborador): Observable<Colaborador> {
-    return this.http.put<Colaborador>(`${this.apiServerUrl}cafe/colab/`, colab);
+    return this.http.put<Colaborador>(`${this.apiServerUrl}`, colab);
   }
 
   public deleteColaborador(colabId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiServerUrl}cafe/colab/${colabId}`);
+    return this.http.delete<void>(`${this.apiServerUrl}/${colabId}`);
   }
 }
